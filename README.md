@@ -37,6 +37,41 @@ gem 'mysql2', '0.3.11'
 
 本ＣＡＳ专门在MySQL　下使用。 安装方式见下方英文：
 
+## 中文安装:
+
+1. 安装 ruby 2.1.2  ,在rbenv下:
+
+$ rbenv install 2.1.2
+
+2. 安装bundler
+
+先退出当前terminal, 然后再重新打开一个, 进入到项目目录下(为了让刚安装的ruby 2.1.2生效)
+
+$ gem install bundler
+
+3. 退出当前terminal ,再重新进来, (如果rbenv 不管用的话), 然后,安装:
+
+$ bundle
+
+
+4. 修改config.yml ,修改数据库配置, 例如 数据库名称 cas_server, 就需要手动建立;
+
+```
+mysql > CREATE DATABASE IF NOT EXISTS cas_server default charset utf8 COLLATE utf8_general_ci;
+```
+
+5. 生成数据库的表结构:
+
+$ bundle exec rake db:migrate
+
+6. 需要实现rails devise的验证接口.
+
+7. 启动cas server:
+
+$ bundle exec rubycas-server -c config.yml
+
+8. 跟nginx配合,部署到某个二级域名上,例如: cas.your-domain.com
+
 ## Installation 安装：
 
 Example with mysql database:
