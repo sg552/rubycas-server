@@ -13,6 +13,28 @@ https://github.com/rubycas/rubycas-server
 3. 修复了一系列的activerecord, mysql2 的驱动问题
 4. 避免了i18n, r18n 的问题
 
+
+
+注意：如果遇到　说找不到gem 'activerecord-mysql2-adapter' 的话，
+绝对不要傻乎乎的在Gemfile中添加下面这一行。
+```
+gem 'activerecord-mysql2-adapter'
+```
+
+应该做的是：　修改 mysql2　这个gem的版本。把它修改成：
+
+```
+gem 'mysql2', '~> 0.3.11'
+```
+
+而不是：
+
+```
+gem 'mysql2', '0.3.11'
+```
+
+目前来看， mysql2的　0.3.21,  0.3.18 版本都可用。  0.3.11版本则会报出奇怪的错误。
+
 本ＣＡＳ专门在MySQL　下使用。 安装方式见下方英文：
 
 ## Installation 安装：
