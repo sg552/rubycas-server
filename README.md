@@ -1,15 +1,21 @@
-# RubyCAS-Server
+# RubyCAS-Server  单点登陆服务器
 
-## Copyright
+## forked from: (本代码的原始官方网站）
 
-Portions contributed by Matt Zukowski are copyright (c) 2011 Urbacon Ltd.
-Other portions are copyright of their respective authors.
+https://github.com/rubycas/rubycas-server
 
-## Authors
+## 说明
 
-See https://github.com/rubycas/rubycas-server/graphs/contributors
+官方的代码库有问题。　不能立刻使用。　需要严格按照这个来运行：
 
-## Installation
+1. ruby 版本：<= 2.2, 最好是 2.1.x
+2. mysql 5.7 的版本已经兼容。修复了主键默认是null的问题。
+3. 修复了一系列的activerecord, mysql2 的驱动问题
+4. 避免了i18n, r18n 的问题
+
+本ＣＡＳ专门在MySQL　下使用。 安装方式见下方英文：
+
+## Installation 安装：
 
 Example with mysql database:
 
