@@ -39,24 +39,11 @@ port: 3800
 
 bind_address: 0.0.0.0
 
-
-
-##### DATABASE #################################################################
-
-# Set up the database connection. Make sure that this database is secure!
-#
-# By default, we use MySQL, since it is widely used and does not require any
-# additional ruby libraries besides ActiveRecord.
-#
-# With MySQL, your config would be something like the following:
-# (be sure to create the casserver database in MySQL beforehand,
-#   i.e. `mysqladmin -u root create casserver`)
-
 database:
   adapter: mysql2
   database: cas_server
   username: root
-  password:
+  password: 666666
   host: localhost
   reconnect: true
 
@@ -202,7 +189,7 @@ infoline: Powered by <a href="http://rubycas.github.com">RubyCAS-Server</a>
 # Set the level to DEBUG if you want more detailed logging.
 
 log:
-  file: /workspace/casserver.log
+  file: casserver.log
   level: DEBUG
 
 
@@ -259,7 +246,7 @@ log:
 # Note that this limit is not enforced on the client side; it refers only to the
 # the maximum lifetime of tickets on the CAS server.
 
-#maximum_session_lifetime: 172800
+#maximum_session_lifetime: 3600
 
 
 # If you want the usernames entered on the login page to be automatically
@@ -275,7 +262,7 @@ log:
 # setting blank will allow any server to authenticate users via the CAS server
 # and potentially harvest sensitive user information.
 
-#allowed_service_ips:
-#  - 127.0.0.1
+allowed_service_ips:
+  - 127.0.0.1
 #  - 192.168.0.0/24
 
