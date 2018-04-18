@@ -64,6 +64,8 @@ mysql > CREATE DATABASE IF NOT EXISTS cas_server default charset utf8 COLLATE ut
 
 $ bundle exec rake db:migrate
 
+如果上一步报错的话,直接加载  initial_data.sql 文件 .
+
 6. 需要实现rails devise的验证接口.
 
 7. 启动cas server:
