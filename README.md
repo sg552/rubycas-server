@@ -72,30 +72,52 @@ $ bundle exec rubycas-server -c config.yml
 
 8. 跟nginx配合,部署到某个二级域名上,例如: cas.your-domain.com
 
-## Installation 安装：
+```
+  server {
+          listen       80;
+          server_name  cas.yoursite.name;
+          charset utf-8;
 
-Example with mysql database:
+          location / {
+              proxy_pass          http://cas_servers;
+              proxy_redirect      default;
+              proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header    X-Real-IP $remote_addr;
+              proxy_set_header    Host $http_host;
+              proxy_next_upstream http_502 http_504 error timeout invalid_header;
 
-1. `git clone git://github.com/rubycas/rubycas-server.git`
-2. `cd rubycas-server`
-3. `cp config/config.example.yml config.yml`
-4. Customize your server by modifying the `config.yml` file. It is well commented but make sure that you take care of the following:
-    1. Change the database driver to `mysql2`
-    2. Configure at least one authenticator
-    3. You might want to change `log.file` to something local, so that you don't need root. For example just `casserver.log`
-    4. You might also want to disable SSL for now by commenting out the `ssl_cert` line and changing the port to something like `8888`
-5. Create the database (i.e. `mysqladmin -u root create casserver` or whatever you have in `config.yml`)
-6. Modify the existing Gemfile by adding drivers for your database server. For example, if you configured `mysql2` in config.yml, add this to the Gemfile: `gem "mysql2"`
-7. Run `bundle install`
-8. `bundle exec rubycas-server -c config.yml`
+          }
+  }
 
-Your RubyCAS-Server should now be running. Once you've confirmed that everything looks good, try switching to a [Passenger](http://www.modrails.com/) deployment. You should be able to point Apache (or whatever) to the `rubycas-server/public` directory, and everything should just work.
+  upstream cas_servers{
+     server localhost:3300;
+  }
+```
 
-Some more info is available at the [RubyCAS-Server Wiki](https://github.com/rubycas/rubycas-server/wiki).
+9. 然后,如果你用的是 rails/devise的话,可以在对应的服务器上增加一个接口:
 
-If you have questions, try the [RubyCAS Google Group](https://groups.google.com/forum/?fromgroups#!forum/rubycas-server) or #rubycas on [freenode](http://freenode.net).
 
-## License
+```
+http://yoursite.com/internal_interfaces/is_password_valid?email=your@email.com&password=123456
+```
 
-RubyCAS-Server is licensed for use under the terms of the MIT License.
-See the LICENSE file bundled with the official RubyCAS-Server distribution for details.
+```
+# your controller
+class InternalInterfacesController < ActionController::Base
+  def is_password_valid
+    if params[:email].blank?  || params[:password].blank? || !is_from_white_list_ip
+      render :text => false and return
+    end
+    member = Member.find_by_email params[:email]
+    render :text => false and return if member.blank?
+
+    render :text =>  member.valid_password?(params[:password])
+  end
+
+
+  def is_from_white_list_ip
+    return request.remote_ip.in? ['192.168.0.15', '127.0.0.1']
+  end
+end
+
+```
