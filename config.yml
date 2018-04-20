@@ -262,7 +262,7 @@ log:
 # setting blank will allow any server to authenticate users via the CAS server
 # and potentially harvest sensitive user information.
 
-allowed_service_ips:
-  - 127.0.0.1
+#allowed_service_ips:
+#  - 127.0.0.1
 #  - 192.168.0.0/24
 
