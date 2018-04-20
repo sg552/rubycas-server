@@ -13,10 +13,7 @@ https://github.com/rubycas/rubycas-server
 3. 修复了一系列的activerecord, mysql2 的驱动问题
 4. 避免了i18n, r18n 的问题
 
-
-
-注意：如果遇到　说找不到gem 'activerecord-mysql2-adapter' 的话，
-绝对不要傻乎乎的在Gemfile中添加下面这一行。
+注意：如果遇到　说找不到gem 'activerecord-mysql2-adapter' 的话， 绝对不要傻乎乎的在Gemfile中添加下面这一行。
 ```
 gem 'activerecord-mysql2-adapter'
 ```
@@ -41,17 +38,23 @@ gem 'mysql2', '0.3.11'
 
 1. 安装 ruby 2.1.2  ,在rbenv下:
 
+```
 $ rbenv install 2.1.2
+```
 
 2. 安装bundler
 
 先退出当前terminal, 然后再重新打开一个, 进入到项目目录下(为了让刚安装的ruby 2.1.2生效)
 
+```
 $ gem install bundler
+```
 
 3. 退出当前terminal ,再重新进来, (如果rbenv 不管用的话), 然后,安装:
 
-$ bundle
+```
+$ bundle install
+```
 
 
 4. 修改config.yml ,修改数据库配置, 例如 数据库名称 cas_server, 就需要手动建立;
@@ -60,17 +63,38 @@ $ bundle
 mysql > CREATE DATABASE IF NOT EXISTS cas_server default charset utf8 COLLATE utf8_general_ci;
 ```
 
+如果遇到问题,就直接加载数据库的结构文件(更加省心)
+
+
 5. 生成数据库的表结构:
 
+```
 $ bundle exec rake db:migrate
+```
 
 如果上一步报错的话,直接加载  initial_data.sql 文件 .
 
+```
+mysql > use cas_server;
+mysql > source initial_data.sql;
+```
+
 6. 需要实现rails devise的验证接口.
+
+6.1 需要客户端具备devise的注册页面
+6.2 替换devise的登陆页面
+6.3 保留devise的找回密码,重新发送激活邮件等功能
+6.4 新增devise的验证接口. (例如  GET  /internal_api/is_password_valid?username=a@a.com&password=666
 
 7. 启动cas server:
 
+```
+# 开发环境 , 缺点是偶尔进程会死掉
 $ bundle exec rubycas-server -c config.yml
+
+# 生产环境
+$ bundle exec thin start -C /opt/app/rubycas-server/config/thin.yml
+```
 
 8. 跟nginx配合,部署到某个二级域名上,例如: cas.your-domain.com
 
@@ -107,7 +131,7 @@ http://yoursite.com/internal_interfaces/is_password_valid?email=your@email.com&p
 # your controller
 class InternalInterfacesController < ActionController::Base
   def is_password_valid
-    if params[:email].blank?  || params[:password].blank? || !is_from_white_list_ip
+    if params[:email].blank?  || params[:password].blank?
       render :text => false and return
     end
     member = Member.find_by_email params[:email]
@@ -116,10 +140,6 @@ class InternalInterfacesController < ActionController::Base
     render :text =>  member.valid_password?(params[:password])
   end
 
-
-  def is_from_white_list_ip
-    return request.remote_ip.in? ['192.168.0.15', '127.0.0.1']
-  end
 end
 
 ```
