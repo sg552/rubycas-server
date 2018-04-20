@@ -1,0 +1,15 @@
+---
+chdir: /opt/app/rubycas-server
+environment: production
+address: 0.0.0.0
+port: 3800
+timeout: 30
+log: log/thin.log
+pid: tmp/pids/thin.pid
+rackup: config.ru    # < ==  NOTICE this.
+max_conns: 1024
+max_persistent_conns: 512
+require: []
+wait: 5
+servers: 4
+daemonize: true
