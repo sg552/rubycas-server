@@ -238,7 +238,7 @@ log:
 # or disable single-sign-out on a per-service basis, but this functionality
 # is planned for a future release.
 
-#enable_single_sign_out: true
+enable_single_sign_out: true
 
 
 ##### OTHER ####################################################################
